@@ -78,7 +78,7 @@ app.post('/signup', async (req, res) => {
         const hashedCPassword = hashedPassword; // Use same hash since they match
         
         const sql = "INSERT INTO user_info (`first_name`, `last_name`, `email`, `password`, `cpassword`, `phone`, `dob`, `gender`) VALUES (?)";
-        
+        //mdlsqkjfqdsmf
         const formData = [
             req.body.first_name,
             req.body.last_name,
