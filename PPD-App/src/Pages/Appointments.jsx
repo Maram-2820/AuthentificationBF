@@ -119,7 +119,7 @@ const Appointments = () => {
                   <p className="doctor-specialty">{appointment.specialty}</p>
                   <p className="appointment-address">
                     <strong>Address:</strong>
-                    <span>{appointment.address}</span>
+                    <span>{appointment.doctorAddress}</span>
                   </p>
                   <p className="appointment-date">
                     <strong>Date & Time:</strong>

@@ -1,5 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
+
 import './Booking.css';
 import { CheckCircle } from 'lucide-react';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -30,6 +30,7 @@ const Booking = () => {
   const [doctor, setDoctor] = useState(null);
   const [successMessage, setSuccessMessage] = useState('');
   const [days, setDays] = useState([]);
+  const [bookedTimes, setBookedTimes] = useState([]);
 
   const times = [
     '8:00 am', '8:30 am', '9:00 am', '9:30 am',
@@ -37,37 +38,38 @@ const Booking = () => {
   ];
 
   const doctorsData = [
-    { id: 31, name: 'Dr. Nassim Benkhaled', specialty: 'Cardiologie', location: 'Algiers', about: 'Expert in diagnosing and treating heart conditions, ensuring cardiovascular health with advanced care.' },
-    { id: 32, name: 'Dr. Imane Zerrouki', specialty: 'Dermatologie', location: 'Algiers', about: 'Focused on skin health and modern treatments for dermatological conditions.' },
-    { id: 33, name: 'Dr. Khaled Bouchareb', specialty: 'Neurologie', location: 'Algiers', about: 'Specialist in brain and nervous system disorders, providing thorough and compassionate neurological care.' },
-    { id: 34, name: 'Dr. Meriem Chaouch', specialty: 'Pédiatrie', location: 'Algiers', about: 'Dedicated to children’s health, offering gentle and effective pediatric medical services.' },
-    { id: 35, name: 'Dr. Riad Saadi', specialty: 'Médecine Générale', location: 'Algiers', about: 'Provides holistic and preventive primary care for patients of all ages.' },
-    { id: 36, name: 'Dr. Sara Gacem', specialty: 'Gynécologie-Obstétrique', location: 'Algiers', about: 'Committed to women’s health, offering support through all stages of life and pregnancy.' },
-    { id: 37, name: 'Dr. Lina Harbi', specialty: 'Radiologie', location: 'Algiers', about: 'Skilled in imaging and diagnostics, aiding accurate and early disease detection.' },
-    { id: 38, name: 'Dr. Amine Bouabdellah', specialty: 'Radiologie', location: 'Algiers', about: 'Delivers precise diagnostic imaging to support effective treatment planning.' },
-    { id: 39, name: 'Dr. Yasmine Merabet', specialty: 'Orthopédie', location: 'Algiers', about: 'Expert in treating bone, joint, and muscle disorders with advanced orthopedic solutions.' },
-    { id: 40, name: 'Dr. Tarek Sebaa', specialty: 'ORL', location: 'Algiers', about: 'Manages conditions related to the ear, nose, and throat with precision and care.' },
-    { id: 41, name: 'Dr. Nadia Belkacem', specialty: 'Cardiologie', location: 'Algiers', about: 'Specialized in heart health, offering advanced care for a wide range of cardiovascular conditions.' },
-    { id: 42, name: 'Dr. Selma Kaci', specialty: 'Médecine Générale', location: 'Algiers', about: 'A trusted general practitioner delivering comprehensive everyday health care.' },
-    { id: 43, name: 'Dr. Zine Kherbache', specialty: 'Pédiatrie', location: 'Algiers', about: 'Provides compassionate and thorough care to ensure the well-being of children.' },
-    { id: 44, name: 'Dr. Hakim Mansouri', specialty: 'Urologie', location: 'Algiers', about: 'Specialist in urinary tract and male reproductive system health.' },
-    { id: 45, name: 'Dr. Rania Lounis', specialty: 'Neurologie', location: 'Algiers', about: 'Offers expert care for neurological conditions using the latest techniques in neuroscience.' },
-    { id: 46, name: 'Dr. Kamel Zerguine', specialty: 'Ophtalmologie', location: 'Algiers', about: 'Focused on vision health and treating various eye conditions with modern solutions.' },
-    { id: 47, name: 'Dr. Mouna Derbal', specialty: 'Gynécologie-Obstétrique', location: 'Algiers', about: 'Dedicated to providing comprehensive care in women’s reproductive health and obstetrics.' },
-    { id: 48, name: 'Dr. Walid Kaci', specialty: 'Dermatologie', location: 'Algiers', about: 'Expert in diagnosing and treating a wide range of skin conditions.' },
-    { id: 49, name: 'Dr. Houda Benaissa', specialty: 'Dermatologie', location: 'Algiers', about: 'Provides personalized care for skin, hair, and nail disorders.' },
-    { id: 50, name: 'Dr. Nabil Benziane', specialty: 'Psychiatrie', location: 'Algiers', about: 'Committed to mental wellness, offering support for emotional and psychological challenges.' },
-    { id: 51, name: 'Dr. Amina Ould Ali', specialty: 'ORL', location: 'Algiers', about: 'Expert in ear, nose, and throat treatments with a patient-centered approach.' },
-    { id: 52, name: 'Dr. Farid Bouraoui', specialty: 'Chirurgie Générale', location: 'Algiers', about: 'Performs a wide range of surgical procedures with a focus on safety and precision.' },
-    { id: 53, name: 'Dr. Layla Rezig', specialty: 'Orthopédie', location: 'Algiers', about: 'Treats injuries and conditions of the musculoskeletal system with advanced care.' },
-    { id: 54, name: 'Dr. Reda Bendimerad', specialty: 'Radiologie', location: 'Algiers', about: 'Uses cutting-edge imaging to assist in accurate diagnoses and treatment planning.' },
-    { id: 55, name: 'Dr. Sabrina Benslama', specialty: 'Pédiatrie', location: 'Algiers', about: 'Delivers attentive pediatric care tailored to each stage of a child’s development.' },
-    { id: 56, name: 'Dr. Karim Gherbi', specialty: 'Médecine Générale', location: 'Algiers', about: 'A dependable family doctor offering preventive care and long-term health guidance.' },
-    { id: 57, name: 'Dr. Fatma Zerhouni', specialty: 'Médecine Générale', location: 'Algiers', about: 'Provides reliable general health services with a focus on prevention and wellness.' },
-    { id: 58, name: 'Dr. Yassine Aouchiche', specialty: 'Neurologie', location: 'Algiers', about: 'Treats complex neurological disorders using advanced diagnostic tools and care.' },
-    { id: 59, name: 'Dr. Lamia Salah', specialty: 'Urologie', location: 'Algiers', about: 'Expert in treating urological conditions with personalized patient care.' },
-    { id: 60, name: 'Dr. Mohamed Benali', specialty: 'Pédiatrie', location: 'Algiers', about: 'Focused on ensuring children’s growth and health through personalized pediatric services.' }
+    { id: 31, name: 'Dr. Nassim Benkhaled', specialty: 'Cardiology', available: true, gender: 'male', location: 'Constantine', address: 'Avenue Aouati Mostefa', about: 'Specialist in cardiology, expert in diagnosing and treating cardiovascular diseases.' },
+    { id: 32, name: 'Dr. Imane Zerrouki', specialty: 'Dermatology', available: true, gender: 'female', location: 'Constantine', address: 'Rue Abane Ramdane', about: 'Experienced dermatologist, specialized in treating skin conditions and dermatological disorders.' },
+    { id: 33, name: 'Dr. Khaled Bouchareb', specialty: 'Neurology', available: true, gender: 'male', location: 'Constantine', address: 'Boulevard Zaamouche Ali', about: 'Qualified neurologist, specialized in treating disorders of the nervous system.' },
+    { id: 34, name: 'Dr. Meriem Chaouch', specialty: 'Pediatrics', available: true, gender: 'female', location: 'Constantine', address: 'Avenue Benmansour', about: 'Caring pediatrician, expert in medical care for infants, children, and adolescents.' },
+    { id: 35, name: 'Dr. Riad Saadi', specialty: 'General Medicine', available: true, gender: 'male', location: 'Constantine', address: 'Avenue Aouati Mostefa', about: 'Skilled general practitioner providing primary healthcare for all ages.' },
+    { id: 36, name: 'Dr. Sara Gacem', specialty: 'Gynecology-Obstetrics', available: true, gender: 'female', location: 'Constantine', address: 'Rue Abane Ramdane', about: 'Specialist in gynecology and obstetrics, supporting women throughout their reproductive life.' },
+    { id: 37, name: 'Dr. Lina Harbi', specialty: 'Radiology', available: true, gender: 'female', location: 'Algiers', address: 'Boulevard Krim Belkacem', about: 'Experienced radiologist, specialized in medical imaging for accurate diagnosis.' },
+    { id: 38, name: 'Dr. Amine Bouabdellah', specialty: 'Radiology', available: true, gender: 'male', location: 'Algiers', address: 'Rue Didouche Mourad', about: 'Qualified radiologist, expert in diagnostic and interventional imaging techniques.' },
+    { id: 39, name: 'Dr. Yasmine Merabet', specialty: 'Orthopedics', available: true, gender: 'female', location: 'Algiers', address: 'Boulevard Krim Belkacem', about: 'Orthopedic specialist in musculoskeletal disorders and related surgical interventions.' },
+    { id: 40, name: 'Dr. Tarek Sebaa', specialty: 'ENT', available: true, gender: 'male', location: 'Oran', address: 'Boulevard Millénium', about: 'ENT specialist treating disorders of the ear, nose, and throat.' },
+    { id: 41, name: 'Dr. Nadia Belkacem', specialty: 'Cardiology', available: true, gender: 'female', location: 'Oran', address: 'Rue Larbi Ben M\'Hidi', about: 'Passionate cardiologist, expert in heart care and disease prevention.' },
+    { id: 42, name: 'Dr. Selma Kaci', specialty: 'General Medicine', available: true, gender: 'female', location: 'Blida', address: 'Avenue Kritli Mokhtar', about: 'General practitioner providing comprehensive and continuous healthcare.' },
+    { id: 43, name: 'Dr. Zine Kherbache', specialty: 'Pediatrics', available: true, gender: 'male', location: 'Blida', address: 'Boulevard Mohamed Boudiaf', about: 'Dedicated pediatrician, specialized in children and adolescent health.' },
+    { id: 44, name: 'Dr. Hakim Mansouri', specialty: 'Urology', available: true, gender: 'male', location: 'Batna', address: 'Avenue de l\'Independence', about: 'Skilled urologist, specialized in urinary and genital conditions.' },
+    { id: 45, name: 'Dr. Rania Lounis', specialty: 'Neurology', available: true, gender: 'female', location: 'Batna', address: 'Boulevard du 1er Novembre', about: 'Neurologist dedicated to treating complex neurological disorders.' },
+    { id: 46, name: 'Dr. Kamel Zerguine', specialty: 'Ophthalmology', available: true, gender: 'male', location: 'Annaba', address: 'Cours de la Révolution', about: 'Expert ophthalmologist, caring for eye health and vision.' },
+    { id: 47, name: 'Dr. Mouna Derbal', specialty: 'Gynecology-Obstetrics', available: true, gender: 'female', location: 'Annaba', address: 'Avenue du 1er Novembre', about: 'Qualified gynecologist-obstetrician, supporting women at all stages of reproductive life.' },
+    { id: 48, name: 'Dr. Walid Kaci', specialty: 'Dermatology', available: true, gender: 'male', location: 'Béjaïa', address: 'Boulevard Colonel Amirouche', about: 'Experienced dermatologist, specialist in skin diseases and aesthetic treatments.' },
+    { id: 49, name: 'Dr. Houda Benaissa', specialty: 'Dermatology', available: true, gender: 'female', location: 'Béjaïa', address: 'Avenue de la Liberté', about: 'Qualified dermatologist, expert in skin care and dermatological prevention.' },
+    { id: 50, name: 'Dr. Nabil Benziane', specialty: 'Psychiatry', available: true, gender: 'male', location: 'Djelfa', address: 'Boulevard Mohamed Boudiaf', about: 'Competent psychiatrist, specialized in diagnosing and treating mental disorders.' },
+    { id: 51, name: 'Dr. Amina Ould Ali', specialty: 'ENT', available: true, gender: 'female', location: 'Tizi Ouzou', address: 'Boulevard Stiti', about: 'ENT specialist, treating head and neck disorders.' },
+    { id: 52, name: 'Dr. Farid Bouraoui', specialty: 'General Surgery', available: true, gender: 'male', location: 'Tlemcen', address: 'Avenue Larbi Ben M\'Hidi', about: 'Experienced general surgeon performing various types of surgical procedures.' },
+    { id: 53, name: 'Dr. Layla Rezig', specialty: 'Orthopedics', available: true, gender: 'female', location: 'Skikda', address: 'Avenue Didouche Mourad', about: 'Orthopedic specialist, treating bone, joint, and muscle conditions.' },
+    { id: 54, name: 'Dr. Reda Bendimerad', specialty: 'Radiology', available: true, gender: 'male', location: 'Sidi Bel Abbès', address: 'Boulevard de la Macta', about: 'Experienced radiologist providing imaging services for accurate diagnosis.' },
+    { id: 55, name: 'Dr. Sabrina Benslama', specialty: 'Pediatrics', available: true, gender: 'female', location: 'Jijel', address: 'Avenue de l\'ALN', about: 'Experienced pediatrician dedicated to the health and development of children.' },
+    { id: 56, name: 'Dr. Karim Gherbi', specialty: 'General Medicine', available: true, gender: 'male', location: 'Médéa', address: 'Boulevard du 1er Novembre', about: 'General practitioner providing preventive and curative care for patients of all ages.' },
+    { id: 57, name: 'Dr. Fatma Zerhouni', specialty: 'General Medicine', available: true, gender: 'female', location: 'Relizane', address: 'Boulevard Zabana', about: 'Experienced general practitioner offering comprehensive and personalized care.' },
+    { id: 58, name: 'Dr. Yassine Aouchiche', specialty: 'Neurology', available: true, gender: 'male', location: 'Guelma', address: 'Boulevard Ben Badis', about: 'Passionate neurologist, expert in treating complex neurological conditions.' },
+    { id: 59, name: 'Dr. Lamia Salah', specialty: 'Urology', available: true, gender: 'female', location: "M'Sila", address: 'Avenue Mohamed Boudiaf', about: 'Experienced urologist specialized in urinary and reproductive system care.' },
+    { id: 60, name: 'Dr. Mohamed Benali', specialty: 'Pediatrics', available: true, gender: 'male', location: 'Mila', address: 'Avenue du 1er Novembre', about: 'Caring pediatrician offering comprehensive medical care for children.' }
   ];
+  
 
   useEffect(() => {
     const today = new Date();
@@ -101,6 +103,40 @@ const Booking = () => {
     }
   }, [doctorId]);
 
+  useEffect(() => {
+    // Get existing appointments from localStorage
+    const storedAppointments = JSON.parse(localStorage.getItem('appointments') || '[]');
+    
+    // Get current date information
+    const today = new Date();
+    const currentMonth = today.toLocaleString('default', { month: 'long' });
+    const currentYear = today.getFullYear();
+    
+    // Find the selected day number
+    const selectedDayObj = days.find(day => day.id === selectedDay);
+    if (!selectedDayObj) return;
+    
+    // Filter appointments for current doctor and selected day
+    const booked = storedAppointments
+      .filter(app => {
+        // Check if the appointment is for the current doctor
+        if (app.doctorId !== parseInt(doctorId)) return false;
+        
+        // Check if the appointment date matches the selected day
+        const appDateParts = app.date.split(' ');
+        const appDay = appDateParts[0]; // Get the day number
+        const appMonth = appDateParts[1]; // Get the month
+        const appYear = appDateParts[2]; // Get the year
+        
+        return appDay === selectedDayObj.number && 
+               appMonth === currentMonth && 
+               appYear === currentYear.toString();
+      })
+      .map(app => app.time);
+    
+    setBookedTimes(booked);
+  }, [doctorId, selectedDay, days]);
+
   const handleBookAppointment = () => {
     if (!doctor || !selectedDay) return;
     
@@ -122,11 +158,13 @@ const Booking = () => {
       doctorName: doctor.name,
       doctorImage: getDoctorImage(doctor.name),
       specialty: doctor.specialty,
-      address: `Rue 3 Nouvelle Villa Constantine Algeria`,
+      doctorAddress: doctor.address,
       date: date,
       time: selectedTime,
       status: 'Upcoming'
     };
+    
+    console.log('Creating new appointment:', newAppointment);
     
     // Retrieve existing appointments
     const existingAppointments = JSON.parse(localStorage.getItem('appointments') || '[]');
@@ -136,6 +174,7 @@ const Booking = () => {
     
     // Save to localStorage
     localStorage.setItem('appointments', JSON.stringify(updatedAppointments));
+    console.log('Updated appointments in localStorage:', updatedAppointments);
     
     // Show success message
     setSuccessMessage('Appointment booked successfully!');
@@ -182,7 +221,7 @@ const Booking = () => {
                 <h3>About</h3>
                 <span className="info-icon">ⓘ</span>
               </div>
-              <p>{doctor.about}</p>
+              <p className="about-text">{doctor.about}</p>
             </div>
 
             <div className="location">
@@ -209,18 +248,28 @@ const Booking = () => {
           </div>
 
           <div className="times-row">
-            {times.map((time) => (
-              <div 
-                key={time}
-                className={`time-slot ${selectedTime === time ? 'selected' : ''}`}
-                onClick={() => setSelectedTime(time)}
-              >
-                {time}
-              </div>
-            ))}
+            {times.map((time) => {
+              const isBooked = bookedTimes.includes(time);
+              return (
+                <div 
+                  key={time}
+                  className={`time-slot ${selectedTime === time ? 'selected' : ''} ${isBooked ? 'booked' : ''}`}
+                  onClick={() => !isBooked && setSelectedTime(time)}
+                >
+                  {time}
+                  {isBooked && <span className="booked-badge">Booked</span>}
+                </div>
+              );
+            })}
           </div>
 
-          <button className="book-button" onClick={handleBookAppointment}>Book an appointment</button>
+          <button 
+            className="book-button" 
+            onClick={handleBookAppointment}
+            disabled={bookedTimes.includes(selectedTime)}
+          >
+            Book an appointment
+          </button>
         </div>
         <footer className="footer3">
           <div className="footer-content1">
@@ -233,3 +282,4 @@ const Booking = () => {
 };
 
 export default Booking;
+
